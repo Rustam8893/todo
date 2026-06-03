@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Task</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .form { max-width: 500px; }
+        input[type="text"] { width: 100%; padding: 10px; margin-bottom: 10px; }
+        button { padding: 8px 14px; }
+    </style>
+</head>
+<body>
+    <h1>Edit Task</h1>
+    <form method="post" class="form" action="">
+        {% csrf_token %}
+        <input type="text" name="title" value="{{ task.title }}" required>
+        <button type="submit">Save</button>
+        <a href="{% url 'index' %}">Cancel</a>
+    </form>
+</body>
+</html>
