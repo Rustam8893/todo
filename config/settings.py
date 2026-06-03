@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,12 +21,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-0p!sx%sip8t3w-n+l)$&_$ax#qbo-hodumxu*ebiib$25d50k#'
+# Read SECRET_KEY from environment for production; fallback to the existing value for local dev
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-0p!sx%sip8t3w-n+l)$&_$ax#qbo-hodumxu*ebiib$25d50k#')
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Read DEBUG from env (useful on Render); default True for local dev but set to False in production
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = []
+# Allow hosts from environment (comma separated) or default to empty list for local dev
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else []
 
 
 # Application definition
@@ -81,6 +84,16 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Optionally configure the database from DATABASE_URL (Render Postgres)
+DATABASE_URL = os.environ.get('DATABASE_URL')
+if DATABASE_URL:
+    try:
+        import dj_database_url
+        DATABASES['default'] = dj_database_url.parse(DATABASE_URL, conn_max_age=600)
+    except Exception:
+        # If dj-database-url isn't installed or parsing fails, keep sqlite default
+        pass
 
 
 # Password validation
