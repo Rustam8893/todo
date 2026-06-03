@@ -28,9 +28,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-0p!sx%sip8t3w-n+l)$&_
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 # Allow hosts from environment (comma separated) or default to empty list for local dev
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',') if os.environ.get('ALLOWED_HOSTS') else []
-
-
+ALLOWED_HOSTS = ['*']
 # Application definition
 
 INSTALLED_APPS = [
